@@ -43,11 +43,18 @@ python app.py
 
 ## 使用方法
 
-1. 訪問 http://localhost:3000
-2. 選擇要使用的 Whisper 模型
-3. 上傳音頻文件
-4. 等待轉錄完成
-5. 下載轉錄結果（TXT 或 SRT 格式）
+1. 雙擊 `start_server.bat` 啟動伺服器
+2. 等待命令視窗顯示 "Running on http://localhost:3000"
+3. 雙擊 `open_browser.bat` 開啟網頁界面
+4. 在網頁界面中：
+   - 選擇要使用的 Whisper 模型
+   - 上傳音頻檔案
+   - 等待轉錄完成
+   - 下載轉錄結果（TXT 或 SRT 格式）
+5. 轉錄完成後，可以在 `outputs` 資料夾中找到：
+   - 轉錄文字檔案（.txt）
+   - 字幕檔案（.srt）
+6. 使用完畢後，雙擊 `stop_server.bat` 關閉伺服器
 
 ## 模型說明
 
