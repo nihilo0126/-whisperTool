@@ -43,6 +43,15 @@ python app.py
 
 ## 使用方法
 
+### 第一次啟動前的準備
+
+1. 確保已安裝 Python 3.8 或更高版本
+2. 雙擊 `install_requirements.bat` 安裝必要的套件
+3. 雙擊 `download_models.bat` 下載需要的模型檔案
+4. 等待所有安裝和下載完成
+
+### 日常使用步驟
+
 1. 雙擊 `start_server.bat` 啟動伺服器
 2. 等待命令視窗顯示 "Running on http://localhost:3000"
 3. 雙擊 `open_browser.bat` 開啟網頁界面
