@@ -2,15 +2,6 @@
 
 這是一個基於 OpenAI Whisper 的語音轉文字工具，專門用於處理訪談記錄的轉錄工作。該工具提供了友好的網頁界面，支持多種音頻格式，並可以選擇不同的 Whisper 模型來平衡準確度和速度。
 
-## 功能特點
-
-- 🎯 支持多種音頻格式（WAV、MP3、M4A、OGG）
-- 🚀 GPU 加速支持
-- 📊 實時轉錄進度顯示
-- 📝 支持輸出 TXT 和 SRT 格式
-- 🎨 現代化的深色主題界面
-- 🔄 支持多種 Whisper 模型（tiny、base、small、medium、large-v3）
-- 📱 響應式設計，支持移動設備
 
 ## 系統需求
 
@@ -25,45 +16,19 @@
    - 選擇 "Download ZIP"
    - 解壓縮下載的檔案
 
-2. 安裝依賴：
-```bash
-pip install -r requirements.txt
-```
 
-3. 下載 Whisper 模型：
-```bash
-# 在 models 目錄下下載需要的模型
-# 例如：tiny.pt, base.pt, small.pt, medium.pt, large-v3.pt
-```
-
-4. 啟動應用：
-```bash
-python app.py
-```
 
 ## 使用方法
 
 ### 第一次啟動前的準備
 
-1. 確保已安裝 Python 3.8 或更高版本
-2. 雙擊 `install_requirements.bat` 安裝必要的套件
-3. 雙擊 `download_models.bat` 下載需要的模型檔案
-4. 等待所有安裝和下載完成
+1.開啟 `setup_env.bat ` 
+2.開啟 `setup.bat` 
+3.等待所有安裝和下載完成
 
 ### 日常使用步驟
 
-1. 雙擊 `start_server.bat` 啟動伺服器
-2. 等待命令視窗顯示 "Running on http://localhost:3000"
-3. 雙擊 `open_browser.bat` 開啟網頁界面
-4. 在網頁界面中：
-   - 選擇要使用的 Whisper 模型
-   - 上傳音頻檔案
-   - 等待轉錄完成
-   - 下載轉錄結果（TXT 或 SRT 格式）
-5. 轉錄完成後，可以在 `outputs` 資料夾中找到：
-   - 轉錄文字檔案（.txt）
-   - 字幕檔案（.srt）
-6. 使用完畢後，雙擊 `stop_server.bat` 關閉伺服器
+1. 開啟 ` start_web.bat ` 
 
 ## 模型說明
 
@@ -73,20 +38,14 @@ python app.py
 - medium: 中型模型，準確度較高
 - large-v3: 大型模型，最高準確度，需要較多 GPU 記憶體
 
-## 配置說明
 
-在 `config.ini` 中可以修改以下設置：
-- 端口號
-- 上傳文件大小限制
-- 模型路徑
-- GPU 設置
 
 ## 注意事項
 
 - 首次運行時會自動下載選擇的模型
-- 使用 GPU 可以顯著提升轉錄速度
+- 使用 NVDIA GPU 可以顯著提升轉錄速度
 - 建議使用 SSD 存儲模型文件
-- 使用 GPU 時請確保有足夠的顯存
+- 使用 GPU 時請確保有足夠的顯存，如果使用CPU且記憶體不足可能可以靠增加虛擬記憶體解決
 - 大型模型需要較多系統資源
 - 建議定期清理任務歷史
 
@@ -102,12 +61,11 @@ python app.py
 
 MIT License
 
-## 貢獻
-
-歡迎提交 Issue 和 Pull Request！
-
-## 致謝
+使用的開源資源
 
 - [OpenAI Whisper](https://github.com/openai/whisper)
 - [Flask](https://flask.palletsprojects.com/)
 - [Dropzone.js](https://www.dropzonejs.com/)
+
+免責聲明
+請遵守所有的開源法規與使用者原則，本頁面之所有本人提供的資源目的皆出以學習與交流之目的
