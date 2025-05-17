@@ -1,0 +1,299 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+    .dropzone {
+        border: 2px dashed var(--primary-color);
+        border-radius: 8px;
+        background: #2a2a2a;
+        min-height: 200px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    .dropzone:hover {
+        border-color: var(--info-color);
+        background: #333;
+    }
+    .progress {
+        height: 20px;
+        border-radius: 10px;
+    }
+    .task-card {
+        transition: all 0.3s ease;
+    }
+    .task-card:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+    }
+    .model-info {
+        font-size: 0.875rem;
+        color: var(--secondary-color);
+    }
+    .system-status {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    .system-status.gpu-available {
+        background-color: rgba(40, 167, 69, 0.1);
+        border: 1px solid var(--success-color);
+    }
+    .system-status.gpu-unavailable {
+        background-color: rgba(255, 193, 7, 0.1);
+        border: 1px solid var(--warning-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-microphone me-2"></i>語音轉錄</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <form action="{{ url_for('upload') }}" method="post" class="dropzone" id="audioDropzone">
+                            <div class="dz-message">
+                                <h3><i class="fas fa-cloud-upload-alt mb-3"></i></h3>
+                                <h4>點擊此處或拖放音頻文件</h4>
+                                <p class="text-muted">支援 WAV、MP3、M4A 和 OGG 格式的音頻文件</p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0"><i class="fas fa-cog me-2"></i>選項設定</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="modelSelect" class="form-label">選擇模型</label>
+                                    <div class="input-group">
+                                        <select class="form-select" id="modelSelect">
+                                            {% for model in models %}
+                                            <option value="{{ model }}" {% if model == suggested_model %}selected{% endif %}>
+                                                {{ model }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                        <button class="btn btn-primary" type="button" id="updateModelBtn">
+                                            <i class="fas fa-sync-alt me-1"></i>更新
+                                        </button>
+                                    </div>
+                                    <div class="model-info mt-2">
+                                        <i class="fas fa-info-circle me-1"></i>建議使用模型: {{ suggested_model }}
+                                    </div>
+                                    <div id="modelStatus" class="mt-2"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="useGPU" checked>
+                                        <label class="form-check-label" for="useGPU">
+                                            <i class="fas fa-microchip me-1"></i>使用 GPU 加速
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 任務區塊 -->
+<div class="row mb-4" id="tasksContainer" style="display: none;">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-tasks me-2"></i>進行中的任務</h5>
+            </div>
+            <div class="card-body">
+                <div id="tasksContent" class="row g-3">
+                    <!-- 任務內容將在這裡動態生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 歷史記錄 -->
+<div class="row mb-4" id="history">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-history me-2"></i>歷史轉錄結果</h5>
+            </div>
+            <div class="card-body">
+                {% if history %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>檔案名稱</th>
+                                <th>大小</th>
+                                <th>日期</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in history %}
+                            <tr>
+                                <td>{{ file.name }}</td>
+                                <td>{{ file.size | round(1) }} KB</td>
+                                <td>{{ file.modified }}</td>
+                                <td>
+                                    <a href="{{ url_for('download_file', filename=file.name) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-download me-1"></i>下載
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center text-muted my-4">尚無歷史記錄</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 系統資訊 -->
+<div class="row" id="system-info">
+    <div class="col-md-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-server me-2"></i>系統資訊</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="system-status {% if system_info.cuda_available %}gpu-available{% else %}gpu-unavailable{% endif %}">
+                            <h6 class="mb-3"><i class="fas fa-microchip me-2"></i>GPU 狀態</h6>
+                            <p class="mb-1">PyTorch 版本: {{ torch.__version__ }}</p>
+                            <p class="mb-1">GPU: {{ system_info.cuda_available and system_info.gpu_info[0].name or 'N/A' }}</p>
+                            <p class="mb-0">系統記憶體: {{ system_info.system_memory.total | round(2) }} GB</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        {% if system_info.cuda_available %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-1"></i>GPU 加速可用
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-1"></i>GPU 加速不可用，將使用 CPU 模式
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- 模型管理區塊 -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0"><i class="fas fa-cube me-2"></i>模型管理</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-primary" onclick="openModelsFolder()">
+                                            <i class="fas fa-folder-open me-1"></i>開啟模型資料夾
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#addModelModal">
+                                            <i class="fas fa-plus me-1"></i>新增模型
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增模型 Modal -->
+<div class="modal fade" id="addModelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-plus me-2"></i>新增模型</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addModelForm" action="{{ url_for('add_model') }}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="modelName" class="form-label">模型名稱</label>
+                        <input type="text" class="form-control" id="modelName" name="model_name" required>
+                        <small class="text-muted">請輸入模型的名稱（例如：my-custom-model）</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modelFile" class="form-label">模型文件</label>
+                        <input type="file" class="form-control" id="modelFile" name="model_file" required>
+                        <small class="text-muted">支援 .pt 或 .bin 格式的模型文件</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modelType" class="form-label">模型類型</label>
+                        <select class="form-select" id="modelType" name="model_type" required>
+                            <option value="whisper">Whisper 模型</option>
+                            <option value="custom">自定義模型</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="submit" form="addModelForm" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>新增
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 將在 main.js 中實現前端邏輯
+});
+
+function openModelsFolder() {
+    fetch('/open_models_folder', {
+        method: 'POST',
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('success', '已開啟模型資料夾');
+        } else {
+            showAlert('danger', '無法開啟模型資料夾：' + data.error);
+        }
+    })
+    .catch(error => {
+        showAlert('danger', '發生錯誤：' + error);
+    });
+}
+
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.querySelector('main').insertBefore(alertDiv, document.querySelector('main').firstChild);
+}
+</script>
+{% endblock %} 

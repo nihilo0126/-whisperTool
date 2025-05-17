@@ -1,0 +1,285 @@
+/* 全局樣式 */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+}
+
+body {
+    background-color: #212121;
+    color: #e0e0e0;
+    font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+}
+
+/* 卡片樣式 */
+.card {
+    background-color: #2a2a2a;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+.card-header {
+    background-color: #333;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.card-body {
+    padding: 1.5rem;
+    color: #e0e0e0;
+}
+
+/* 導航樣式 */
+.navbar {
+    background-color: #1a1a1a;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.nav-link {
+    color: #b3b3b3 !important;
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+}
+
+/* 按鈕樣式 */
+.btn {
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.btn-outline-info {
+    color: #0dcaf0;
+    border-color: #0dcaf0;
+}
+
+.btn-outline-info:hover {
+    background-color: #0dcaf0;
+    color: black;
+}
+
+/* Dropzone 自定義樣式 */
+.dropzone {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    background: #2a2a2a;
+    min-height: 200px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.dropzone:hover {
+    border-color: var(--info-color);
+    background: #333;
+}
+
+.dropzone .dz-message {
+    margin: 2em 0;
+}
+
+.dropzone .dz-preview .dz-image {
+    border-radius: 5px;
+}
+
+.dropzone .dz-preview .dz-progress {
+    height: 15px;
+    margin-top: -8px;
+}
+
+.dropzone .dz-message h3 {
+    color: #e0e0e0;
+}
+
+.dropzone .dz-message p.text-muted {
+    color: #b3b3b3 !important;
+}
+
+/* 任務卡片樣式 */
+.task-card {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.task-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.task-status-completed {
+    border-left: 4px solid #28a745;
+}
+
+.task-status-processing {
+    border-left: 4px solid #0d6efd;
+}
+
+.task-status-error {
+    border-left: 4px solid #dc3545;
+}
+
+.task-status-queued {
+    border-left: 4px solid #ffc107;
+}
+
+/* 進度條樣式 */
+.progress {
+    height: 20px;
+    border-radius: 10px;
+    background-color: #333;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+/* 歷史記錄表格樣式 */
+.table {
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #333;
+    border-bottom: 2px solid #444;
+}
+
+.table th {
+    font-weight: 600;
+    border-top: none;
+    color: #b3b3b3;
+}
+
+.table td {
+    border-color: #333;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+/* 表單元素 */
+.form-control, .form-select {
+    background-color: #333;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* 修改小文本的顏色 */
+.text-muted {
+    color: #b0b0b0 !important;
+}
+
+/* 修改頁腳樣式 */
+footer {
+    background-color: #1a1a1a !important;
+    color: #b3b3b3;
+}
+
+/* 警告框樣式 */
+.alert-success {
+    background-color: #1e3b2f;
+    border-color: #28a745;
+    color: #8fd19e;
+}
+
+.alert-warning {
+    background-color: #3b331e;
+    border-color: #ffc107;
+    color: #ffda6a;
+}
+
+.alert-danger {
+    background-color: #3b1e1e;
+    border-color: #dc3545;
+    color: #f5b9bf;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .dropzone {
+        min-height: 150px;
+    }
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* 自定義滾動條 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
+} 
